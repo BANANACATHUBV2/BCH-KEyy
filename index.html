@@ -205,7 +205,7 @@
 
     async function carregarKey() {
       try {
-        const res = await fetch("https://pastebin.com/raw/NkpFVKUN")
+        const res = await fetch("https://api.allorigins.win/raw?url=https://pastebin.com/raw/NkpFVKUN")
         const texto = await res.text()
         document.getElementById("keyDisplay").textContent = texto.trim()
       } catch (e) {
