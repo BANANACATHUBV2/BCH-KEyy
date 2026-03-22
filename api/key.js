@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 
 function tokenValido(token) {
-  const agora = Math.floor(Date.now() / 600000)
+  const agora = Math.floor(Date.now() / 30000)
   for (const periodo of [agora, agora - 1]) {
     const esperado = crypto
       .createHmac('sha256', process.env.TOKEN_SECRET)
