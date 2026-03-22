@@ -204,14 +204,17 @@
     }
 
     async function carregarKey() {
-      try {
-        const res = await fetch("/api/key")
-        const texto = await res.text()
-        document.getElementById("keyDisplay").textContent = texto.trim()
-      } catch (e) {
-        document.getElementById("keyDisplay").textContent = "Erro ao carregar. Tente novamente."
-      }
-    }
+  const params = new URLSearchParams(window.location.search)
+  const token = params.get("t")
+  try {
+    const res = await fetch("/api/key?t=" + token)
+    if (!res.ok) throw new Error()
+    const texto = await res.text()
+    document.getElementById("keyDisplay").textContent = texto
+  } catch (e) {
+    document.getElementById("keyDisplay").textContent = "Token expirado! Volte pelo link oficial."
+  }
+}
 
     function copiarKey() {
       const key = document.getElementById("keyDisplay").textContent
