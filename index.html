@@ -189,45 +189,43 @@
     // Token secreto — troca esse valor quando quiser
     const TOKEN_VALIDO = "bch2025"
 
-    function verificarAcesso() {
-      const params = new URLSearchParams(window.location.search)
-      const token = params.get("t")
-
-      if (token === TOKEN_VALIDO) {
-        document.getElementById("subtitulo").textContent = "Sua key está pronta!"
-        document.getElementById("cardKey").style.display = "block"
-        carregarKey()
-      } else {
-        document.getElementById("subtitulo").textContent = "Acesso não autorizado"
-        document.getElementById("cardBloqueado").style.display = "block"
-      }
-    }
-
-    async function carregarKey() {
+    async function verificarAcesso() {
   const params = new URLSearchParams(window.location.search)
   const token = params.get("t")
+
+  if (!token) {
+    document.getElementById("subtitulo").textContent = "Acesso não autorizado"
+    document.getElementById("cardBloqueado").style.display = "block"
+    return
+  }
+
+  // Testa se o token é válido buscando a key
   try {
     const res = await fetch("/api/key?t=" + token)
     if (!res.ok) throw new Error()
     const texto = await res.text()
+
+    document.getElementById("subtitulo").textContent = "Sua key está pronta!"
+    document.getElementById("cardKey").style.display = "block"
     document.getElementById("keyDisplay").textContent = texto
   } catch (e) {
-    document.getElementById("keyDisplay").textContent = "Token expirado! Volte pelo link oficial."
+    document.getElementById("subtitulo").textContent = "Token expirado ou inválido"
+    document.getElementById("cardBloqueado").style.display = "block"
   }
 }
 
-    function copiarKey() {
-      const key = document.getElementById("keyDisplay").textContent
-      navigator.clipboard.writeText(key).then(() => {
-        const btn = document.getElementById("copyBtn")
-        btn.textContent = "✅ Copiado!"
-        btn.classList.add("copied")
-        setTimeout(() => {
-          btn.textContent = "Copiar Key"
-          btn.classList.remove("copied")
-        }, 2000)
-      })
-    }
+function copiarKey() {
+  const key = document.getElementById("keyDisplay").textContent
+  navigator.clipboard.writeText(key).then(() => {
+    const btn = document.getElementById("copyBtn")
+    btn.textContent = "✅ Copiado!"
+    btn.classList.add("copied")
+    setTimeout(() => {
+      btn.textContent = "Copiar Key"
+      btn.classList.remove("copied")
+    }, 2000)
+  })
+}
 
     verificarAcesso()
   </script>
